@@ -13,7 +13,7 @@ export default function SubmitButton({ isLoading, className, children }: SubmitB
       {isLoading ? (
         <div className="flex items-center gap-4">
           <Image src="/assets/icons/loader.svg" alt="loader" width={24} height={24} className="animate-spin" />
-          Loading...
+          Carregando...
         </div>
       ) : (
         children
