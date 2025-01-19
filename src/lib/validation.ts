@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
 export const UserFormValidation = z.object({
-  name: z.string().min(2, 'Nome deve conter pelo menos 2 caracteres').max(50, 'Nome deve conter no máximo 50 caracteres'),
+  first_name: z.string().min(2, 'Nome deve conter pelo menos 2 caracteres').max(50, 'Nome deve conter no máximo 50 caracteres'),
+  last_name: z.string().min(2, 'Sobrenome deve conter pelo menos 2 caracteres').max(50, 'Sobrenome deve conter no máximo 50 caracteres'),
   email: z.string().email('Email inválido'),
-  phone: z.string().refine(phone => /^\+\d{10,15}$/.test(phone), 'Telefone inválido'),
 });
 
 export const PatientFormValidation = z.object({

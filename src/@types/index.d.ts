@@ -9,9 +9,9 @@ declare type Gender = 'Masculino' | 'Feminino';
 declare type Status = 'pendente' | 'agendado' | 'cancelado';
 
 declare interface CreateUserParams {
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
-  phone: string;
 }
 
 declare interface User extends CreateUserParams {
