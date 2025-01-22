@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 import 'react-datepicker/dist/react-datepicker.css';
-import { Appointment } from '@/@types/appwrite.types';
+import { Appointment } from '@/interfaces/appwrite.types';
 
 export const AppointmentModal = ({
   patientId,

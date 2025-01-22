@@ -3,9 +3,9 @@
 import { revalidatePath } from 'next/cache';
 import { ID, Query } from 'node-appwrite';
 
-import { Appointment } from '@/@types/appwrite.types';
+import { Appointment } from '@/interfaces/appwrite.types';
 
-import { APPOINTMENT_COLLECTION_ID, DATABASE_ID, databases, messaging } from '../appwrite.config';
+import { APPOINTMENT_COLLECTION_ID, DATABASE_ID, databases, messaging } from '../api.config';
 import { formatDateTime, parseStringify } from '../utils';
 
 //  CREATE APPOINTMENT
@@ -117,3 +117,20 @@ export const getAppointment = async (appointmentId: string) => {
     console.error('An error occurred while retrieving the existing patient:', error);
   }
 };
+export async function createUser(user: CreateUserParams) {
+  try {
+    const response = await fetch('http://localhost:3001/user/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    });
+
+    console.log(user);
+
+    // return parseStringify(newUser);
+  } catch (error: any) {
+    console.error('An error occurred while creating a new user:', error);
+  }
+}

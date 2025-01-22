@@ -1,16 +1,44 @@
 import { z } from 'zod';
 
 export const UserFormValidation = z.object({
+  email: z.string().email('Email inválido'),
+  password: z.string().min(6, 'Senha deve conter pelo menos 6 caracteres').max(50, 'Senha deve conter no máximo 50 caracteres'),
+});
+
+export const SignupFormValidation = z.object({
   first_name: z.string().min(2, 'Nome deve conter pelo menos 2 caracteres').max(50, 'Nome deve conter no máximo 50 caracteres'),
   last_name: z.string().min(2, 'Sobrenome deve conter pelo menos 2 caracteres').max(50, 'Sobrenome deve conter no máximo 50 caracteres'),
   email: z.string().email('Email inválido'),
+  password: z.string().min(6, 'Senha deve conter pelo menos 6 caracteres').max(50, 'Senha deve conter no máximo 50 caracteres'),
+  phone: z.string().refine(phone => /^\+\d{10,15}$/.test(phone), 'Telefone inválido'),
+  birth_date: z.string(),
+  gender: z.enum(['Masculino', 'Feminino']),
+  treatment_consent: z
+    .boolean()
+    .default(false)
+    .refine(value => value === true, {
+      message: 'Você deve consentir com o tratamento para prosseguir',
+    }),
+  disclosure_consent: z
+    .boolean()
+    .default(false)
+    .refine(value => value === true, {
+      message: 'Você deve consentir com a divulgação para prosseguir',
+    }),
+  privacy_consent: z
+    .boolean()
+    .default(false)
+    .refine(value => value === true, {
+      message: 'Você deve consentir com a privacidade para prosseguir',
+    }),
 });
 
 export const PatientFormValidation = z.object({
-  name: z.string().min(2, 'Nome deve conter pelo menos 2 caracteres').max(50, 'Nome deve conter no máximo 50 caracteres'),
+  first_name: z.string().min(2, 'Nome deve conter pelo menos 2 caracteres').max(50, 'Nome deve conter no máximo 50 caracteres'),
+  last_name: z.string().min(2, 'Sobrenome deve conter pelo menos 2 caracteres').max(50, 'Sobrenome deve conter no máximo 50 caracteres'),
   email: z.string().email('Email inválido'),
   phone: z.string().refine(phone => /^\+\d{10,15}$/.test(phone), 'Telefone inválido'),
-  birthDate: z.coerce.date(),
+  birthDate: z.string(),
   gender: z.enum(['Masculino', 'Feminino']),
   address: z.string().min(5, 'Endereço deve conter pelo menos 5 caracteres').max(500, 'Endereço deve conter no máximo 500 caracteres'),
   occupation: z.string().min(2, 'Ocupação deve conter pelo menos 2 caracteres').max(500, 'Ocupação deve conter no máximo 500 caracteres'),

@@ -6,13 +6,7 @@ declare type SearchParamProps = {
 };
 
 declare type Gender = 'Masculino' | 'Feminino';
-declare type Status = 'pendente' | 'agendado' | 'cancelado';
-
-declare interface CreateUserParams {
-  first_name: string;
-  last_name: string;
-  email: string;
-}
+declare type Status = 'Pendente' | 'Agendado' | 'Cancelado';
 
 declare interface User extends CreateUserParams {
   $id: string;
