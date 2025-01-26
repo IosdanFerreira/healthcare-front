@@ -26,8 +26,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
-      <body className={cn('min-h-screen bg-dark-300 font-sans antialiased', fontSans.variable)}>
-        <ThemeProvider attribute="class" defaultTheme="dark">
+      <body className={cn('min-h-screen bg-light-200 font-sans antialiased', fontSans.variable)}>
+        <ThemeProvider attribute="class" defaultTheme="light">
           {children}
           <Toaster />
         </ThemeProvider>

@@ -3,16 +3,19 @@ import PasskeyModal from '@/components/passkey-modal';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function Home({ searchParams }: SearchParamProps) {
-  // const isAdmin = searchParams?.admin === 'true';
-
+export default function Home() {
   return (
-    <div className="flex h-screen max-h-screen">
-      {/* {isAdmin && <PasskeyModal />} */}
-
-      <section className="remove-scrollbar container my-auto">
-        <div className="sub-container max-w-[496px]">
-          <Image src="/assets/icons/logo-full.svg" height={1000} width={1000} alt="patient" className="mb-12 h-10 w-fit" />
+    <div className="flex items-center justify-center h-screen max-h-screen overflow-hidden bg-light-400">
+      <section>
+        <div className="sub-container max-w-[496px] p-8 rounded-2xl bg-light-200 shadow-2xl my-5">
+          <section className="mb-5 space-y-3">
+            <h1 className="text-xl font-black">
+              Bem-vindo ao <span className="text-green-500">CarePulse</span>
+            </h1>
+            <p className="text-light-700 text-[15px]">
+              Acesse sua conta para gerenciar consultas, acompanhar pacientes e otimizar sua prática médica. Tudo em um só lugar!
+            </p>
+          </section>
 
           <LoginForm />
 
@@ -22,11 +25,8 @@ export default function Home({ searchParams }: SearchParamProps) {
             </Link>
           </div>
 
-          <div className="text-14-regular mt-20 flex justify-between">
-            <p className="justify-items-end text-dark-600 xl:text-left">© 2025 CarePluse</p>
-            <Link href="/?admin=true" className="text-green-500">
-              Admin
-            </Link>
+          <div className="text-14-regular flex justify-between">
+            <p className="justify-items-end text-dark-300 xl:text-left">© 2025 CarePluse</p>
           </div>
         </div>
       </section>

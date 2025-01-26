@@ -10,23 +10,15 @@ import { Form } from '../ui/form';
 import CustomFormField, { FormFieldType } from '../custom-form-field';
 import SubmitButton from '../submit-button';
 import { login } from '@/lib/actions/user/login.action';
-import { toast } from 'sonner';
-import { useToast } from '@/hooks/use-toast';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '../ui/alert-dialog';
+import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
+import { CircleAlert } from 'lucide-react';
+import { IDefaultResponse, IErrorProps, IUser } from '@/@types';
+import { ILoginParams } from '@/interfaces/user';
 
 export default function LoginForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState({ open: false, message: '' });
+  const [errors, setErrors] = useState<IErrorProps[]>([]);
 
   const form = useForm<z.infer<typeof UserFormValidation>>({
     resolver: zodResolver(UserFormValidation),
@@ -36,26 +28,34 @@ export default function LoginForm() {
     },
   });
 
+  // Função para lidar com o envio do formulário
   const onSubmit = async (values: z.infer<typeof UserFormValidation>) => {
     setIsLoading(true);
+    setErrors([]);
 
-    const loginParams = {
-      email: values.email,
-      password: values.password,
+    // Parâmetros de login
+    const loginParams: ILoginParams = {
+      email: values?.email,
+      password: values?.password,
     };
 
     try {
-      const newUser = await login(loginParams);
+      // Realizar login do usuário
+      const user: IDefaultResponse<IUser> = await login(loginParams);
 
-      if (newUser.error) {
-        setError({ open: true, message: newUser.message });
+      // Se a API retornar erros, definir os erros na state
+      if (user?.errors) {
+        setErrors(user?.errors);
         return;
       }
 
-      router.push(`/patients/${newUser.id}/new-appointment`);
+      // Redirecionar para a página de agendamento de consulta
+      router.push(`/patients/${user?.data?.id}/new-appointment`);
     } catch (error: any) {
+      // Imprimir o erro na console
       console.log('Erro ao realizar login', error);
     } finally {
+      // Setar a state de loading como false
       setIsLoading(false);
     }
   };
@@ -63,31 +63,38 @@ export default function LoginForm() {
   return (
     <section>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
-          <section className="mb-12 space-y-4">
-            <h1 className="header">Olá, seja bem-vindo</h1>
-            <p className="text-dark-700">Comece com as consultas</p>
-          </section>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-4">
+          <CustomFormField
+            fieldType={FormFieldType.INPUT}
+            control={form.control}
+            name="email"
+            label="Email"
+            placeholder="Digite seu email"
+            iconSrc="/assets/icons/email.svg"
+            iconAlt="email"
+          />
 
-          <CustomFormField fieldType={FormFieldType.INPUT} control={form.control} name="email" label="Email" placeholder="" iconSrc="/assets/icons/email.svg" iconAlt="email" />
+          <CustomFormField
+            fieldType={FormFieldType.PASSWORD}
+            control={form.control}
+            name="password"
+            label="Senha"
+            placeholder="Digite sua senha"
+            iconSrc="/assets/icons/key.svg"
+            iconAlt="user"
+          />
 
-          <CustomFormField fieldType={FormFieldType.PASSWORD} control={form.control} name="password" label="Senha" placeholder="" iconSrc="/assets/icons/user.svg" iconAlt="user" />
+          {errors?.length > 0 && (
+            <Alert className="border-[#ff1f1f65] rounded-xl bg-[#ff1f1f0c]">
+              <CircleAlert className="h-4 w-4 stroke-error-300" />
+              <AlertTitle className="text-error-300 mb-1">Oops! Algo deu errado</AlertTitle>
+              {errors?.map(error => <AlertDescription key={error?.property}>{error?.message}</AlertDescription>)}
+            </Alert>
+          )}
 
           <SubmitButton isLoading={isLoading}>Entrar</SubmitButton>
         </form>
       </Form>
-
-      <AlertDialog open={error.open}>
-        <AlertDialogContent className="rounded-lg">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Oops! Algo deu errado</AlertDialogTitle>
-            <AlertDialogDescription className="text-sm">{error.message}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogAction onClick={() => setError({ open: false, message: '' })}>Continue</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </section>
   );
 }

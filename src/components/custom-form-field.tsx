@@ -3,11 +3,16 @@ import { Control } from 'react-hook-form';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
-import PhoneInput from 'react-phone-number-input';
-import { E164Number } from 'libphonenumber-js/core';
 import { Checkbox } from './ui/checkbox';
-import ReactDatePicker from 'react-datepicker';
+import ReactDatePicker, { registerLocale } from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import 'react-phone-number-input/style.css';
+import { ptBR } from 'date-fns/locale';
+registerLocale('ptBR', ptBR);
 import { Select, SelectContent, SelectTrigger, SelectValue } from './ui/select';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+import { InputMask } from '@react-input/mask';
 
 export enum FormFieldType {
   INPUT = 'input',
@@ -20,7 +25,7 @@ export enum FormFieldType {
   PASSWORD = 'password',
 }
 
-interface CustomProps {
+export interface CustomProps {
   control: Control<any>;
   name: string;
   label?: string;
@@ -39,10 +44,10 @@ function RenderInput({ field, props }: { field: any; props: CustomProps }) {
   switch (props.fieldType) {
     case FormFieldType.INPUT:
       return (
-        <div className="flex rounded-md border border-dark-500 bg-dark-400">
+        <div className="flex rounded-xl border border-light-600">
           {props.iconSrc && <Image src={props.iconSrc} height={24} width={24} alt={props.iconAlt || 'icon'} className="ml-2" />}
           <FormControl>
-            <Input placeholder={props.placeholder} {...field} className="shad-input border-0" />
+            <Input placeholder={props.placeholder} {...field} className="" />
           </FormControl>
         </div>
       );
@@ -54,24 +59,28 @@ function RenderInput({ field, props }: { field: any; props: CustomProps }) {
       );
     case FormFieldType.PHONE_INPUT:
       return (
-        <FormControl>
-          <PhoneInput
-            defaultCountry="US"
-            placeholder={props.placeholder}
-            international
-            withCountryCallingCode
-            value={field.value as E164Number | undefined}
-            onChange={field.onChange}
-            className="input-phone"
-          />
-        </FormControl>
+        <div className="flex rounded-xl border border-light-600">
+          {props.iconSrc && <Image src={props.iconSrc} height={24} width={24} alt={props.iconAlt || 'icon'} className="ml-2" />}
+          <FormControl>
+            <InputMask
+              mask="(__) _____-____"
+              replacement={{ _: /\d/ }}
+              className="flex h-9 w-full rounded-xl bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 
+              file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground 
+              placeholder:text-[#9394a5] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring 
+              disabled:cursor-not-allowed disabled:opacity-50 md:text-sm placeholder:text"
+              placeholder={props.placeholder}
+              {...field}
+            />
+          </FormControl>
+        </div>
       );
     case FormFieldType.CHECKBOX:
       return (
         <FormControl>
           <div className="flex items-center gap-4">
             <Checkbox id={props.name} checked={field.value} onCheckedChange={field.onChange} />
-            <label htmlFor={props.name} className="checkbox-label">
+            <label htmlFor={props.name} className="text-sm text-dark-300">
               {props.label}
             </label>
           </div>
@@ -79,7 +88,7 @@ function RenderInput({ field, props }: { field: any; props: CustomProps }) {
       );
     case FormFieldType.DATE_PICKER:
       return (
-        <div className="flex rounded-md border border-dark-500 bg-dark-400">
+        <div className="flex rounded-xl border border-light-600">
           <Image src="/assets/icons/calendar.svg" height={24} width={24} alt="user" className="ml-2" />
           <FormControl>
             <ReactDatePicker
@@ -89,6 +98,8 @@ function RenderInput({ field, props }: { field: any; props: CustomProps }) {
               timeInputLabel="Time:"
               dateFormat={props.dateFormat ?? 'MM/dd/yyyy'}
               wrapperClassName="date-picker"
+              locale="ptBR"
+              placeholderText="Selecione uma data"
             />
           </FormControl>
         </div>
@@ -110,10 +121,10 @@ function RenderInput({ field, props }: { field: any; props: CustomProps }) {
       return props.renderSkeleton ? props.renderSkeleton(field) : null;
     case FormFieldType.PASSWORD:
       return (
-        <div className="flex rounded-md border border-dark-500 bg-dark-400">
+        <div className="flex rounded-xl border border-light-600">
           {props.iconSrc && <Image src={props.iconSrc} height={24} width={24} alt={props.iconAlt || 'icon'} className="ml-2" />}
           <FormControl>
-            <Input placeholder={props.placeholder} {...field} type="password" className="shad-input border-0" />
+            <Input placeholder={props.placeholder} {...field} type="password" className=" border-0" />
           </FormControl>
         </div>
       );
@@ -131,10 +142,10 @@ export default function CustomFormField(props: CustomProps) {
       name={name}
       render={({ field }) => (
         <FormItem className="flex-1">
-          {props.fieldType !== FormFieldType.CHECKBOX && label && <FormLabel className="shad-input-label">{label}</FormLabel>}
+          {props.fieldType !== FormFieldType.CHECKBOX && label && <FormLabel className=" text-dark-400">{label}</FormLabel>}
           <RenderInput field={field} props={props} />
 
-          <FormMessage className="shad-error" />
+          <FormMessage className="text-error-300 text-[12px]" />
         </FormItem>
       )}
     />

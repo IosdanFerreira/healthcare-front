@@ -6,12 +6,7 @@ const { fontFamily } = require('tailwindcss/defaultTheme');
 
 const config = {
   darkMode: ['class'],
-  content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-  ],
+  content: ['./pages/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './app/**/*.{ts,tsx}', './src/**/*.{ts,tsx}'],
   prefix: '',
   theme: {
     container: {
@@ -37,7 +32,11 @@ const config = {
           '700': '#F24E43',
         },
         light: {
-          '200': '#E8E9E9',
+          '200': '#fafafa',
+          '400': '#EDEDED',
+          '500': '#d2d3db',
+          '600': '#9394a5',
+          '700': '#484b6a',
         },
         dark: {
           '200': '#0D0F10',
@@ -46,6 +45,9 @@ const config = {
           '500': '#363A3D',
           '600': '#76828D',
           '700': '#ABB8C4',
+        },
+        error: {
+          '300': '#991b1b',
         },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',

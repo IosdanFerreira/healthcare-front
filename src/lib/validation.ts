@@ -5,39 +5,35 @@ export const UserFormValidation = z.object({
   password: z.string().min(6, 'Senha deve conter pelo menos 6 caracteres').max(50, 'Senha deve conter no máximo 50 caracteres'),
 });
 
-export const SignupFormValidation = z.object({
-  first_name: z.string().min(2, 'Nome deve conter pelo menos 2 caracteres').max(50, 'Nome deve conter no máximo 50 caracteres'),
-  last_name: z.string().min(2, 'Sobrenome deve conter pelo menos 2 caracteres').max(50, 'Sobrenome deve conter no máximo 50 caracteres'),
-  email: z.string().email('Email inválido'),
-  password: z.string().min(6, 'Senha deve conter pelo menos 6 caracteres').max(50, 'Senha deve conter no máximo 50 caracteres'),
-  phone: z.string().refine(phone => /^\+\d{10,15}$/.test(phone), 'Telefone inválido'),
-  birth_date: z.string(),
-  gender: z.enum(['Masculino', 'Feminino']),
-  treatment_consent: z
-    .boolean()
-    .default(false)
-    .refine(value => value === true, {
-      message: 'Você deve consentir com o tratamento para prosseguir',
-    }),
-  disclosure_consent: z
-    .boolean()
-    .default(false)
-    .refine(value => value === true, {
-      message: 'Você deve consentir com a divulgação para prosseguir',
-    }),
-  privacy_consent: z
-    .boolean()
-    .default(false)
-    .refine(value => value === true, {
-      message: 'Você deve consentir com a privacidade para prosseguir',
-    }),
-});
+export const SignupFormValidation = z
+  .object({
+    first_name: z.string().min(2, 'Nome deve conter ao menos 2 caracteres').max(50, 'Nome deve conter no máximo 50 caracteres'),
+    last_name: z.string().min(2, 'Sobrenome deve conter ao menos 2 caracteres').max(50, 'Sobrenome deve conter no máximo 50 caracteres'),
+    email: z.string().email('Email inválido'),
+    phone: z
+      .string()
+      .nonempty('Telefone é obrigatório')
+      .refine(phone => /^\(\d{2}\) \d{5}-\d{4}$/.test(phone), 'Telefone inválido'),
+    password: z
+      .string()
+      .min(6, 'Senha deve conter pelo menos 6 caracteres')
+      .max(50, 'Senha deve conter no máximo 50 caracteres')
+      .refine(
+        password => /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password),
+        'A senha deve conter ao menos 8 caracteres, uma letra maiúscula, um número e um carácter especial',
+      ),
+    confirm_password: z.string().nonempty('Confirmação de senha obrigatória'),
+  })
+  .refine(data => data.password === data.confirm_password, {
+    message: 'As senhas devem ser iguais',
+    path: ['confirm_password'],
+  });
 
 export const PatientFormValidation = z.object({
   first_name: z.string().min(2, 'Nome deve conter pelo menos 2 caracteres').max(50, 'Nome deve conter no máximo 50 caracteres'),
   last_name: z.string().min(2, 'Sobrenome deve conter pelo menos 2 caracteres').max(50, 'Sobrenome deve conter no máximo 50 caracteres'),
   email: z.string().email('Email inválido'),
-  phone: z.string().refine(phone => /^\+\d{10,15}$/.test(phone), 'Telefone inválido'),
+  phone: z.string().refine(phone => /^[0-9]{11}$/.test(phone), 'Telefone inválido'),
   birthDate: z.string(),
   gender: z.enum(['Masculino', 'Feminino']),
   address: z.string().min(5, 'Endereço deve conter pelo menos 5 caracteres').max(500, 'Endereço deve conter no máximo 500 caracteres'),
@@ -48,7 +44,10 @@ export const PatientFormValidation = z.object({
     .max(50, 'Nome para contato de emergência deve conter no máximo 50 caracteres'),
   emergencyContactNumber: z.string().refine(emergencyContactNumber => /^\+\d{10,15}$/.test(emergencyContactNumber), 'Telefone inválido'),
   primaryPhysician: z.string().min(2, 'Selecione pelo menos um doutor'),
-  insuranceProvider: z.string().min(2, 'Nome do seguro deve conter pelo menos 2 caracteres').max(50, 'Nome do seguro deve conter no máximo 50 caracteres'),
+  insuranceProvider: z
+    .string()
+    .min(2, 'Nome do seguro deve conter pelo menos 2 caracteres')
+    .max(50, 'Nome do seguro deve conter no máximo 50 caracteres'),
   insurancePolicyNumber: z
     .string()
     .min(2, 'Número da apólice de seguro deve conter pelo menos 2 caracteres')

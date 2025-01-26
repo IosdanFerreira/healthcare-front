@@ -1,13 +1,14 @@
 'use server';
 
+import { IDefaultResponse, IUser } from '@/@types';
+import { API_CONFIG } from '@/api/api-config';
 import { ILoginParams } from '@/interfaces/user';
-import { parseStringify } from '@/lib/utils';
 import { cookies } from 'next/headers';
 
-export async function login(loginParams: ILoginParams) {
+export async function login(loginParams: ILoginParams): Promise<IDefaultResponse<IUser>> {
   const cookieStore = await cookies();
 
-  const response = await fetch('http://localhost:3001/user/login', {
+  const response: Response = await fetch(`${API_CONFIG.base_url}/user/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -15,16 +16,26 @@ export async function login(loginParams: ILoginParams) {
     body: JSON.stringify(loginParams),
   });
 
-  const loggedUser = await response.json();
+  const user: IDefaultResponse<IUser> = await response.json();
 
-  if (loggedUser.error) {
-    return parseStringify(loggedUser);
+  // Se a API não retornar erros, deve definir o token de acesso e o refresh-token nos Cookies
+  if (!user.errors) {
+    // Define o token de acesso nos Cookies
+    cookieStore.set({
+      name: 'access_token',
+      httpOnly: true,
+      sameSite: 'strict',
+      maxAge: 60 * 60,
+      value: user.data.access_token,
+      path: '/',
+    });
+
+    // Define o refresh-token nos Cookies
+    cookieStore.set({
+      name: 'refresh_token',
+      value: user.data.refresh_token,
+    });
   }
 
-  cookieStore.set({
-    name: 'accessToken',
-    value: loggedUser.accessToken,
-  });
-
-  return parseStringify(loggedUser);
+  return user;
 }
