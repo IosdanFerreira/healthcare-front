@@ -1,8 +1,8 @@
 /**
- * Capitalize the first letter of each word in a given string.
+ * Transforma a primeira letra de cada palavra de uma string em maiúscula
  *
- * @param {string} text - The string to capitalize.
- * @returns {string} The capitalized string.
+ * @param {string} text - string a ser transformada.
+ * @returns {string} string transformada.
  *
  * @example
  * capitalize('hello world') // 'Hello World'

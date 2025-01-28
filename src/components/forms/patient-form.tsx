@@ -14,6 +14,8 @@ import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { CircleAlert } from 'lucide-react';
 import { IDefaultResponse, IErrorProps, IUser } from '@/@types';
 import { ILoginParams } from '@/interfaces/user';
+import InputPassword from '../inputs/password-input';
+import TextInput from '../inputs/text-input';
 
 export default function LoginForm() {
   const router = useRouter();
@@ -33,7 +35,6 @@ export default function LoginForm() {
     setIsLoading(true);
     setErrors([]);
 
-    // Parâmetros de login
     const loginParams: ILoginParams = {
       email: values?.email,
       password: values?.password,
@@ -46,17 +47,14 @@ export default function LoginForm() {
       // Se a API retornar erros, definir os erros na state
       if (user?.errors) {
         setErrors(user?.errors);
+        setIsLoading(false);
         return;
       }
 
       // Redirecionar para a página de agendamento de consulta
       router.push(`/patients/${user?.data?.id}/new-appointment`);
     } catch (error: any) {
-      // Imprimir o erro na console
       console.log('Erro ao realizar login', error);
-    } finally {
-      // Setar a state de loading como false
-      setIsLoading(false);
     }
   };
 
@@ -64,8 +62,7 @@ export default function LoginForm() {
     <section>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-4">
-          <CustomFormField
-            fieldType={FormFieldType.INPUT}
+          <TextInput
             control={form.control}
             name="email"
             label="Email"
@@ -74,8 +71,7 @@ export default function LoginForm() {
             iconAlt="email"
           />
 
-          <CustomFormField
-            fieldType={FormFieldType.PASSWORD}
+          <InputPassword
             control={form.control}
             name="password"
             label="Senha"
@@ -84,7 +80,7 @@ export default function LoginForm() {
             iconAlt="user"
           />
 
-          {errors?.length > 0 && (
+          {errors.length > 0 && (
             <Alert className="border-[#ff1f1f65] rounded-xl bg-[#ff1f1f0c]">
               <CircleAlert className="h-4 w-4 stroke-error-300" />
               <AlertTitle className="text-error-300 mb-1">Oops! Algo deu errado</AlertTitle>

@@ -42,38 +42,11 @@ export interface CustomProps {
 
 function RenderInput({ field, props }: { field: any; props: CustomProps }) {
   switch (props.fieldType) {
-    case FormFieldType.INPUT:
-      return (
-        <div className="flex rounded-xl border border-light-600">
-          {props.iconSrc && <Image src={props.iconSrc} height={24} width={24} alt={props.iconAlt || 'icon'} className="ml-2" />}
-          <FormControl>
-            <Input placeholder={props.placeholder} {...field} className="" />
-          </FormControl>
-        </div>
-      );
     case FormFieldType.TEXTAREA:
       return (
         <FormControl>
           <Textarea placeholder={props.placeholder} {...field} className="shad-textArea" disabled={props.disabled} />
         </FormControl>
-      );
-    case FormFieldType.PHONE_INPUT:
-      return (
-        <div className="flex rounded-xl border border-light-600">
-          {props.iconSrc && <Image src={props.iconSrc} height={24} width={24} alt={props.iconAlt || 'icon'} className="ml-2" />}
-          <FormControl>
-            <InputMask
-              mask="(__) _____-____"
-              replacement={{ _: /\d/ }}
-              className="flex h-9 w-full rounded-xl bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 
-              file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground 
-              placeholder:text-[#9394a5] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring 
-              disabled:cursor-not-allowed disabled:opacity-50 md:text-sm placeholder:text"
-              placeholder={props.placeholder}
-              {...field}
-            />
-          </FormControl>
-        </div>
       );
     case FormFieldType.CHECKBOX:
       return (
@@ -119,15 +92,6 @@ function RenderInput({ field, props }: { field: any; props: CustomProps }) {
       );
     case FormFieldType.SKELETON:
       return props.renderSkeleton ? props.renderSkeleton(field) : null;
-    case FormFieldType.PASSWORD:
-      return (
-        <div className="flex rounded-xl border border-light-600">
-          {props.iconSrc && <Image src={props.iconSrc} height={24} width={24} alt={props.iconAlt || 'icon'} className="ml-2" />}
-          <FormControl>
-            <Input placeholder={props.placeholder} {...field} type="password" className=" border-0" />
-          </FormControl>
-        </div>
-      );
     default:
       return null;
   }

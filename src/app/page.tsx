@@ -20,7 +20,7 @@ export default function Home() {
           <LoginForm />
 
           <div className="py-4">
-            <Link href="/signup" className="text-sm hover:underline">
+            <Link href="/cadastre" className="text-sm hover:underline">
               Ainda não possui uma conta?
             </Link>
           </div>
