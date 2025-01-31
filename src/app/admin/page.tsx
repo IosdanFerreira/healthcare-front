@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { getRecentAppointmentList } from '@/lib/actions/appointment.actions';
+import { getRecentAppointmentList } from '@/api/actions/appointment.actions';
 import { columns } from '@/components/table/columns';
 import StatCard from '@/components/stat-card';
 import { DataTable } from '@/components/table/data-table';

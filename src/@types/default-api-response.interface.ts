@@ -13,6 +13,7 @@ interface IPagination {
 }
 
 export interface IDefaultResponse<T> {
+  result: IErrorProps;
   status_code: number;
   success: boolean;
   message: string;

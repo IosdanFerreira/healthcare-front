@@ -9,13 +9,14 @@ import { z } from 'zod';
 import { Form } from '../ui/form';
 import CustomFormField, { FormFieldType } from '../custom-form-field';
 import SubmitButton from '../submit-button';
-import { login } from '@/lib/actions/user/login.action';
+import { login } from '@/back/actions/user/login.action';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { CircleAlert } from 'lucide-react';
 import { IDefaultResponse, IErrorProps, IUser } from '@/@types';
 import { ILoginParams } from '@/interfaces/user';
 import InputPassword from '../inputs/password-input';
 import TextInput from '../inputs/text-input';
+import { useUserStore } from '@/stores/user.store';
 
 export default function LoginForm() {
   const router = useRouter();
@@ -35,18 +36,12 @@ export default function LoginForm() {
     setIsLoading(true);
     setErrors([]);
 
-    const loginParams: ILoginParams = {
-      email: values?.email,
-      password: values?.password,
-    };
-
     try {
       // Realizar login do usuário
-      const user: IDefaultResponse<IUser> = await login(loginParams);
+      const user: IDefaultResponse<IUser> = await login(values as ILoginParams);
 
-      // Se a API retornar erros, definir os erros na state
       if (user?.errors) {
-        setErrors(user?.errors);
+        setErrors(user.errors);
         setIsLoading(false);
         return;
       }
@@ -54,7 +49,7 @@ export default function LoginForm() {
       // Redirecionar para a página de agendamento de consulta
       router.push(`/patients/${user?.data?.id}/new-appointment`);
     } catch (error: any) {
-      console.log('Erro ao realizar login', error);
+      console.error('Erro ao realizar login:', error);
     }
   };
 

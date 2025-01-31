@@ -1,7 +1,7 @@
 'use server';
 
 import { IDefaultResponse, IUser } from '@/@types';
-import { API_CONFIG } from '@/api/api-config';
+import { API_CONFIG } from '@/back/api-config';
 import { ISignupParams } from '@/interfaces/user';
 import { parseStringify } from '@/lib/utils';
 

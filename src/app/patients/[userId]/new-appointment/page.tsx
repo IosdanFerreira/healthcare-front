@@ -1,9 +1,7 @@
 import Image from 'next/image';
+import { getUser } from '@/back/actions/user/get-user.action';
 
-import { getPatient } from '@/lib/actions/patient.actions';
-import { getUser } from '@/lib/actions/user/get-user.action';
-
-const Appointment = async ({ params: { userId } }: SearchParamProps) => {
+export default async function Appointment({ params: { userId } }: SearchParamProps) {
   const user = await getUser(userId);
 
   return (
@@ -18,13 +16,13 @@ const Appointment = async ({ params: { userId } }: SearchParamProps) => {
             type="create"
           /> */}
 
-          <p className="copyright mt-10 py-12">© 2024 CarePluse {user?.first_name}</p>
+          <p className="copyright mt-10 py-12">
+            © 2024 CarePluse {user?.data?.first_name} {user?.data?.last_name}
+          </p>
         </div>
       </section>
 
       <Image src="/assets/images/appointment-img.png" height={1500} width={1500} alt="appointment" className="side-img max-w-[390px] bg-bottom" />
     </div>
   );
-};
-
-export default Appointment;
+}

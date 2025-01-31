@@ -8,15 +8,15 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Form } from '../ui/form';
 import SubmitButton from '../submit-button';
-import { createUser } from '@/lib/actions/user/signup.action';
+import { createUser } from '@/back/actions/user/signup.action';
 import { CircleAlert } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
-import { capitalize } from '@/lib/utils/capitalize-input.utils';
 import { IErrorProps } from '@/@types';
-import { login } from '@/lib/actions/user/login.action';
+import { login } from '@/back/actions/user/login.action';
 import InputPassword from '../inputs/password-input';
 import TextInput from '../inputs/text-input';
 import MaskInput from '../inputs/mask-input';
+import { capitalize } from '@/lib/utils/capitalize-input.utils';
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -62,17 +62,17 @@ export default function RegisterForm() {
       }
 
       // Se a criação do usuário for bem-sucedida, realizar login
-      const loggedUser = await login({ email: createdUser.data.email, password: user.password });
+      // const loggedUser = await login({ email: createdUser.data.email, password: user.password });
 
-      // Se a API retornar erros, definir os erros na state
-      if (loggedUser?.errors) {
-        setErrors(loggedUser?.errors);
-        setIsLoading(false);
-        return;
-      }
+      // // Se a API retornar erros, definir os erros na state
+      // if (loggedUser?.errors) {
+      //   setErrors(loggedUser?.errors);
+      //   setIsLoading(false);
+      //   return;
+      // }
 
       // Redirecionar para a página de agendamento de consulta
-      router.push(`/patients/${loggedUser?.data?.id}/new-appointment`);
+      router.push(`/patients/${createdUser?.data?.id}/new-appointment`);
     } catch (error) {
       console.log(error);
     }

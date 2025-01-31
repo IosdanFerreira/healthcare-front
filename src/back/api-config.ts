@@ -3,5 +3,5 @@ export interface IApiConfig {
 }
 
 export const API_CONFIG: IApiConfig = {
-  base_url: process.env.API_URL,
+  base_url: process.env.NEXT_PUBLIC_API_ENDPOINT,
 };
